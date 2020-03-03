@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**************************************************************************************************************************************
+This autounattend.xml is meant to be put inside the root of an iso or the root of an usb. This xml file answers the questions from the
+asks from the windows installation screen, creates a user "svc", and starts scripts that only happen on first login.
+******************************************************************************************************************************************-->
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+   <settings pass="windowsPE">
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+         <SetupUILanguage>
+            <UILanguage>en-US</UILanguage>
+         </SetupUILanguage>
+         <InputLocale>0409:00000409</InputLocale>
+         <SystemLocale>en-US</SystemLocale>
+         <UILanguage>en-US</UILanguage>
+         <UILanguageFallback>en-US</UILanguageFallback>
+         <UserLocale>en-US</UserLocale>
+      </component>
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+			<DiskConfiguration>
+				<Disk wcm:action="add">
+					<DiskID>0</DiskID>
+					<WillWipeDisk>true</WillWipeDisk>
+					<CreatePartitions>
+						<!-- Windows RE Tools partition -->
+						<CreatePartition wcm:action="add">
+							<Order>1</Order>
+							<Type>Primary</Type>
+							<Size>300</Size>
+						</CreatePartition>
+						<!-- System partition (ESP) -->
+						<CreatePartition wcm:action="add">
+							<Order>2</Order>
+							<Type>EFI</Type>
+							<Size>100</Size>
+						</CreatePartition>
+						<!-- Microsoft reserved partition (MSR) -->
+						<CreatePartition wcm:action="add">
+							<Order>3</Order>
+							<Type>MSR</Type>
+							<Size>128</Size>
+						</CreatePartition>
+						<!-- Windows partition -->
+						<CreatePartition wcm:action="add">
+							<Order>4</Order>
+							<Type>Primary</Type>
+							<Extend>true</Extend>
+						</CreatePartition>
+					</CreatePartitions>
+					<ModifyPartitions>
+						<!-- Windows RE Tools partition -->
+						<ModifyPartition wcm:action="add">
+							<Order>1</Order>
+							<PartitionID>1</PartitionID>
+							<Label>WINRE</Label>
+							<Format>NTFS</Format>
+							<TypeID>DE94BBA4-06D1-4D40-A16A-BFD50179D6AC</TypeID>
+						</ModifyPartition>
+						<!-- System partition (ESP) -->
+						<ModifyPartition wcm:action="add">
+							<Order>2</Order>
+							<PartitionID>2</PartitionID>
+							<Label>System</Label>
+							<Format>FAT32</Format>
+						</ModifyPartition>
+						<!-- MSR partition does not need to be modified -->
+						<ModifyPartition wcm:action="add">
+							<Order>3</Order>
+							<PartitionID>3</PartitionID>
+						</ModifyPartition>
+						<!-- Windows partition -->
+						<ModifyPartition wcm:action="add">
+							<Order>4</Order>
+							<PartitionID>4</PartitionID>
+							<Label>OS</Label>
+							<Letter>C</Letter>
+							<Format>NTFS</Format>
+						</ModifyPartition>
+					</ModifyPartitions>
+				</Disk>
+			</DiskConfiguration>
+			<ImageInstall>
+				<OSImage>
+					<InstallTo>
+						<DiskID>0</DiskID>
+						<PartitionID>4</PartitionID>
+					</InstallTo>
+					<InstallToAvailablePartition>false</InstallToAvailablePartition>
+				</OSImage>
+			</ImageInstall>
+         <UserData>
+            <AcceptEula>false</AcceptEula>
+            <FullName>svc</FullName>
+            <Organization>Hitachi-Rail</Organization>
+            <ProductKey>
+               <Key>W269N-WFGWX-YVC9B-4J6C9-T83GX</Key>
+            </ProductKey>
+         </UserData>
+      </component>
+   </settings>
+   <settings pass="offlineServicing">
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-LUA-Settings" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+         <EnableLUA>false</EnableLUA>
+      </component>
+   </settings>
+   <settings pass="generalize">
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Security-SPP" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+         <SkipRearm>1</SkipRearm>
+      </component>
+   </settings>
+   <settings pass="specialize">
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+         <InputLocale>0409:00000409</InputLocale>
+         <SystemLocale>en-US</SystemLocale>
+         <UILanguage>en-US</UILanguage>
+         <UILanguageFallback>en-US</UILanguageFallback>
+         <UserLocale>en-US</UserLocale>
+      </component>
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Security-SPP-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+         <SkipAutoActivation>true</SkipAutoActivation>
+      </component>
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-SQMApi" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+         <CEIPEnabled>0</CEIPEnabled>
+      </component>
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+    <CopyProfile>true</CopyProfile>
+    <ComputerName>HR-PC</ComputerName>
+         <ProductKey>W269N-WFGWX-YVC9B-4J6C9-T83GX</ProductKey>
+      </component>
+   </settings>
+   <settings pass="oobeSystem">
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+    <CopyProfile>true</CopyProfile> 
+    <AutoLogon>
+            <Password>
+               <Value>password123</Value>
+               <PlainText>true</PlainText>
+            </Password>
+            <Enabled>true</Enabled>
+            <Username>svc</Username>
+         </AutoLogon>
+         <OOBE>
+            <HideEULAPage>true</HideEULAPage>
+            <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
+            <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+            <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+            <NetworkLocation>Home</NetworkLocation>
+            <SkipUserOOBE>true</SkipUserOOBE>
+            <SkipMachineOOBE>true</SkipMachineOOBE>
+            <ProtectYourPC>3</ProtectYourPC>
+         </OOBE>
+         <UserAccounts>
+            <AdministratorPassword>
+               <Value>password123</Value>
+               <PlainText>true</PlainText>
+            </AdministratorPassword>
+            <LocalAccounts>
+               <LocalAccount wcm:action="add">
+                  <Password>
+                     <Value>password123</Value>
+                     <PlainText>true</PlainText>
+                  </Password>
+                  <Description />
+                  <DisplayName>svc</DisplayName>
+                  <Group>Administrators</Group>
+                  <Name>svc</Name>
+               </LocalAccount>
+            </LocalAccounts>
+         </UserAccounts>
+         <RegisteredOrganization>Hitachi-Rail</RegisteredOrganization>
+         <RegisteredOwner>svc</RegisteredOwner>
+         <DisableAutoDaylightTimeSet>false</DisableAutoDaylightTimeSet>
+         <FirstLogonCommands>
+            <SynchronousCommand wcm:action="add">
+               <Description>Control Panel View</Description>
+               <Order>1</Order>
+               <CommandLine>reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel" /v StartupPage /t REG_DWORD /d 1 /f</CommandLine>
+               <RequiresUserInput>true</RequiresUserInput>
+            </SynchronousCommand>
+            <SynchronousCommand wcm:action="add">
+               <Order>2</Order>
+               <Description>Control Panel Icon Size</Description>
+               <RequiresUserInput>false</RequiresUserInput>
+               <CommandLine>reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel" /v AllItemsIconView /t REG_DWORD /d 0 /f</CommandLine>
+            </SynchronousCommand>
+            <SynchronousCommand wcm:action="add">
+               <Order>3</Order>
+               <RequiresUserInput>false</RequiresUserInput>
+               <CommandLine>cmd /C wmic useraccount where name="svc" set PasswordExpires=false</CommandLine>
+               <Description>Password Never Expires</Description>
+            </SynchronousCommand>
+            <SynchronousCommand wcm:action="add">
+               <Order>4</Order>
+               <RequiresUserInput>false</RequiresUserInput>
+               <CommandLine>reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 0 /f</CommandLine>
+               <Description>Will disable autologin after the first login.</Description>
+            </SynchronousCommand>
+            <SynchronousCommand wcm:action="add">
+               <Order>5</Order>
+               <RequiresUserInput>false</RequiresUserInput>
+               <CommandLine>"C:\Users\default\AppData\Local\Programs\Python\Python38\pythonw.exe" "C:\Users\Public\first-login-scripts\main.py"</CommandLine>
+               <Description>Runs the first-login python scripts.</Description>
+            </SynchronousCommand>
+         </FirstLogonCommands>
+         <TimeZone>Eastern Standard Time</TimeZone>
+      </component>
+   </settings>
+</unattend>

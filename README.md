@@ -1,4 +1,8 @@
-# Adding-Files-To-Windows-10-ISOs
+# Windows-10-Creating-Custom-ISOs-Automation
+The idea of this repo, is to put this inside of a Continuous Deployment build pipeline for our windows software.
+We pull the latest windows software from git and build them into exes.
+We take a base windows-10 iso, that has python 3 pre-installed with it.
+We put the exes 
 This repo contains a python script, main.py, that automates loading loading files into Windows ISOs.
 This script was made by me and used by my corporation inside a continous deployment pipeline. 
 Latest sofware from the git repo was loaded into these Windows ISOs in daily builds to be given to clients.
