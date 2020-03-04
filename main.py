@@ -18,7 +18,7 @@ def parse_args() -> Namespace:
     arg_parser = argparse.ArgumentParser(description=description, allow_abbrev=False)
     arg_parser.add_argument('a1', metavar='input_iso', type=str, help='The path to the input iso file.')
     arg_parser.add_argument('a2', metavar='output_iso', type=str, help='The path to the output iso file.')
-    arg_parser.add_argument('-u', '--uefi', action='store_true', help='Make the Windows autounattend.xml boot from '
+    arg_parser.add_argument('-u', action='store_true', help='Make the Windows autounattend.xml boot from '
                                                                       'uefi instead of mbr.')
 
     args = arg_parser.parse_args()

@@ -50,7 +50,7 @@ class Backend(threading.Thread):
 
             # Adding a dummy subprocess for testing.
             append_wrapper('\nLooking at root folder:\n')
-            cp = sp.run(['DIR', 'C:\\'], shell=True, text=True, stdout=sp.PIPE, stderr=sp.PIPE)
+            cp = sp.run(['DIR', 'C:\\'], check=True, shell=True, text=True, stdout=sp.PIPE, stderr=sp.PIPE)
             append_wrapper(cp.stdout)
 
             self.make_tail()
@@ -63,14 +63,20 @@ class Backend(threading.Thread):
                 if isinstance(stderr, bytes):
                     stderr = stderr.decode()
             append_wrapper(stderr)
-            raise
+
+            append_wrapper("\nPrinting Stack Trace.\n")
+            append_wrapper(str.join('', traceback.format_exception(None, e, e.__traceback__)))
+
+            err_message = 'An exception has occurred when configuring Windows 10.\nPlease check the log file.\n'
+            self.make_tail()
+            self.append_file_and_queue(QueueElement(QueueState.FAILED, err_message))
 
         except Exception as e:
             append_wrapper("\nOops, an exception occurred. :^(\n")
             append_wrapper("Printing Stack Trace.\n")
             append_wrapper(str.join('', traceback.format_exception(None, e, e.__traceback__)))
 
-            err_message = 'An exception has occurred when configuring windows 10.\nPlease check the log file.\n'
+            err_message = 'An exception has occurred when configuring Windows 10.\nPlease check the log file.\n'
             self.make_tail()
             self.append_file_and_queue(QueueElement(QueueState.FAILED, err_message))
 

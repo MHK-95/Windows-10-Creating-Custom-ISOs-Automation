@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------------------------------------------------------
 # Project Stuff
 #----------------------------------------------------------------------------------------------------------------------
-# Ignore the storage directory since we are storing ISOs and such here.
+# Ignore the storage directory since we are storing isos and files we want to copy over there.
 storage_dir/*
 !storage_dir/.gitkeep
 !storage_dir/isos/
